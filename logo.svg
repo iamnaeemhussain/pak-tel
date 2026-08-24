@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="58" viewBox="0 0 250 58" fill="none">
+  <title>Pak-Tel</title>
+  <g stroke="#C8FF43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 3.5h22a7 7 0 0 1 7 7v37a7 7 0 0 1-7 7H18a7 7 0 0 1-7-7v-37a7 7 0 0 1 7-7Z"/>
+    <path d="M19 14h20M19 44h20M23 20v18M28 20v18M33 20v18M38 20v18"/>
+    <path d="M47 18h7M47 29h9M47 40h7M4 18h8M2 29h10M4 40h8"/>
+  </g>
+  <text x="62" y="40" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="-2.7">Pak<tspan fill="#C8FF43">–</tspan>Tel</text>
+</svg>
