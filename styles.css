@@ -1378,6 +1378,10 @@ a {
   justify-content: space-between;
 }
 
+.plan-card.has-discount .plan-card-top {
+  padding-right: 92px;
+}
+
 .plan-badges {
   display: flex;
   align-items: center;
@@ -1552,61 +1556,95 @@ a {
   color: var(--lime);
 }
 
-.plan-metric {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin-top: 10px;
+
+.plan-card.has-discount .plan-copy {
+  margin-top: 47px;
 }
 
-.discount-star {
-  position: relative;
-  display: grid;
-  width: 84px;
-  height: 84px;
-  flex: 0 0 84px;
-  place-items: center;
-  color: var(--ink);
-  filter: drop-shadow(0 7px 6px rgba(170, 117, 18, 0.16));
-  transform: rotate(-8deg);
-}
-
-.discount-star::before {
+.discount-bubble {
   position: absolute;
-  inset: 0;
-  color: #f3bd43;
-  content: "★";
-  font-family: Arial, sans-serif;
-  font-size: 90px;
-  line-height: 0.95;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(146, 88, 5, 0.2);
+  z-index: 3;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  width: 88px;
+  height: 74px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  border-radius: 19px 19px 19px 7px;
+  color: var(--ink);
+  background: linear-gradient(145deg, #ffd66c 0%, #f8b74b 58%, #f49a67 100%);
+  box-shadow: 0 10px 18px rgba(171, 105, 22, 0.22), 4px 5px 0 rgba(7, 19, 34, 0.08);
+  pointer-events: none;
+  transform: rotate(5deg);
 }
 
-.discount-star > span,
-.discount-star > small {
+.discount-bubble::before {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.63);
+  content: "";
+}
+
+.discount-bubble::after {
+  position: absolute;
+  right: 14px;
+  bottom: -9px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid #f49a67;
+  border-right: 7px solid transparent;
+  content: "";
+  transform: rotate(-3deg);
+}
+
+.discount-bubble > span,
+.discount-bubble > strong,
+.discount-bubble > small {
   position: relative;
   z-index: 1;
   display: block;
-  text-align: center;
+  line-height: 1;
 }
 
-.discount-star > span {
+.discount-bubble > span {
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.discount-bubble > strong {
   margin-top: 4px;
   font-family: var(--display);
-  font-size: 12px;
+  font-size: 23px;
   font-weight: 800;
-  letter-spacing: -0.06em;
-  line-height: 1;
+  letter-spacing: -0.08em;
 }
 
-.discount-star > small {
+.discount-bubble > small {
   margin-top: 2px;
   font-family: var(--mono);
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  line-height: 1;
+  letter-spacing: 0.1em;
+}
+
+.plan-card.is-popular .discount-bubble {
+  border-color: var(--lime);
+}
+
+.plan-metric {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  margin-top: 10px;
 }
 
 .plan-metric strong {

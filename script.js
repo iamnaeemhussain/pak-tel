@@ -232,10 +232,10 @@
       : `<span class="plan-badge plan-badge--quiet">Flexible data</span>`;
     const discount = discountLabel(plan.discount);
     const discountAmount = discount.replace(/\s+OFF$/i, "");
-    const discountStar = discount ? `<span class="discount-star" role="img" title="${escapeHTML(discount)}" aria-label="${escapeHTML(discount)}"><span>${escapeHTML(discountAmount)}</span><small>OFF</small></span>` : "";
+    const discountBubble = discount ? `<div class="discount-bubble" role="img" title="${escapeHTML(discount)}" aria-label="${escapeHTML(discount)}"><span>SAVE</span><strong>${escapeHTML(discountAmount)}</strong><small>OFF</small></div>` : "";
     const price = formatPrice(plan.price);
     const actualPrice = plan.actualPrice !== null && plan.actualPrice !== undefined ? formatPrice(plan.actualPrice) : "";
-    const actualPriceMarkup = actualPrice ? `<span class="plan-original-price" title="Actual price"><small>Actual</small>${escapeHTML(actualPrice)}</span>` : "";
+    const actualPriceMarkup = actualPrice ? `<span class="plan-original-price" title="Actual price"><small>Actual price</small><b>${escapeHTML(actualPrice)}</b></span>` : "";
     const coverage = plan.coverage || "5G/4G/LTE";
     const planType = plan.planType || "Data only";
     const hotspot = plan.hotspot || "Yes";
@@ -250,14 +250,15 @@
     ];
 
     return `
-      <article class="plan-card${plan.popular ? " is-popular" : ""}">
+      <article class="plan-card${plan.popular ? " is-popular" : ""}${discount ? " has-discount" : ""}">
+        ${discountBubble}
         <div class="plan-card-top">
           <div class="plan-badges">${badge}</div>
-          <span class="plan-top-meta"><span class="sim-chip" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span></span>
+          <span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span>
         </div>
         <div class="plan-copy">
           <p class="plan-name">${escapeHTML(plan.name)}</p>
-          <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span>${discountStar}</div>
+          <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
           <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt><span class="spec-icon">${planSpecIcon(label)}</span><span>${escapeHTML(label)}</span></dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
         </div>
         <div class="plan-bottom">
