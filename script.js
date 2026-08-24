@@ -266,6 +266,7 @@
   }
 
   async function loadLivePlans() {
+    if (!elements.plansGrid) return;
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 7000);
 
@@ -488,23 +489,25 @@
   }
 
   function setupEvents() {
-    elements.plansGrid.addEventListener("click", (event) => {
-      const planButton = event.target.closest("[data-plan-id]");
-      const resetButton = event.target.closest("[data-reset-plans]");
-      if (resetButton) {
-        state.filter = "all";
-        document.querySelectorAll(".filter-button").forEach((button) => {
-          const isActive = button.dataset.filter === "all";
-          button.classList.toggle("is-active", isActive);
-          button.setAttribute("aria-selected", String(isActive));
-        });
-        renderPlans();
-        return;
-      }
-      if (!planButton) return;
-      const plan = state.plans.find((item) => item.id === planButton.dataset.planId);
-      openCheckout(plan);
-    });
+    if (elements.plansGrid) {
+      elements.plansGrid.addEventListener("click", (event) => {
+        const planButton = event.target.closest("[data-plan-id]");
+        const resetButton = event.target.closest("[data-reset-plans]");
+        if (resetButton) {
+          state.filter = "all";
+          document.querySelectorAll(".filter-button").forEach((button) => {
+            const isActive = button.dataset.filter === "all";
+            button.classList.toggle("is-active", isActive);
+            button.setAttribute("aria-selected", String(isActive));
+          });
+          renderPlans();
+          return;
+        }
+        if (!planButton) return;
+        const plan = state.plans.find((item) => item.id === planButton.dataset.planId);
+        openCheckout(plan);
+      });
+    }
 
     document.querySelectorAll(".filter-button").forEach((button) => {
       button.addEventListener("click", () => {
@@ -518,38 +521,46 @@
       });
     });
 
-    elements.sortSelect.addEventListener("change", () => {
-      state.sort = elements.sortSelect.value;
-      renderPlans();
-    });
+    if (elements.sortSelect) {
+      elements.sortSelect.addEventListener("change", () => {
+        state.sort = elements.sortSelect.value;
+        renderPlans();
+      });
+    }
 
     document.querySelectorAll("[data-close-modal]").forEach((element) => element.addEventListener("click", closeCheckout));
-    elements.whatsappOrder.addEventListener("click", orderOnWhatsApp);
+    if (elements.whatsappOrder) elements.whatsappOrder.addEventListener("click", orderOnWhatsApp);
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeCheckout();
     });
 
-    elements.deviceForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-      checkDevice(elements.deviceSearch.value);
-    });
+    if (elements.deviceForm) {
+      elements.deviceForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        checkDevice(elements.deviceSearch.value);
+      });
+    }
 
-    elements.brandGrid.addEventListener("click", (event) => {
-      const button = event.target.closest("[data-brand]");
-      if (button) showBrand(button.dataset.brand);
-    });
+    if (elements.brandGrid) {
+      elements.brandGrid.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-brand]");
+        if (button) showBrand(button.dataset.brand);
+      });
 
-    elements.brandGrid.addEventListener("load", (event) => {
-      if (event.target.matches(".brand-logo")) event.target.parentElement.classList.add("has-logo");
-    }, true);
+      elements.brandGrid.addEventListener("load", (event) => {
+        if (event.target.matches(".brand-logo")) event.target.parentElement.classList.add("has-logo");
+      }, true);
 
-    elements.brandGrid.addEventListener("error", (event) => {
-      if (event.target.matches(".brand-logo")) event.target.remove();
-    }, true);
+      elements.brandGrid.addEventListener("error", (event) => {
+        if (event.target.matches(".brand-logo")) event.target.remove();
+      }, true);
+    }
 
-    elements.floatingWhatsApp.addEventListener("click", () => {
-      window.open(whatsappUrl("Hi Pak-Tel! I’d like help choosing an eSIM plan."), "_blank", "noopener,noreferrer");
-    });
+    if (elements.floatingWhatsApp) {
+      elements.floatingWhatsApp.addEventListener("click", () => {
+        window.open(whatsappUrl("Hi Pak-Tel! I’d like help choosing an eSIM plan."), "_blank", "noopener,noreferrer");
+      });
+    }
   }
 
   function cacheElements() {
@@ -578,7 +589,8 @@
     setupHeader();
     setupReveal();
     setupEvents();
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const yearElement = document.getElementById("year");
+    if (yearElement) yearElement.textContent = new Date().getFullYear();
     loadLivePlans();
   }
 
