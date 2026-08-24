@@ -1,9 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="250" height="58" viewBox="0 0 250 58" fill="none">
-  <title>Pak-Tel</title>
-  <g stroke="#C8FF43" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M18 3.5h22a7 7 0 0 1 7 7v37a7 7 0 0 1-7 7H18a7 7 0 0 1-7-7v-37a7 7 0 0 1 7-7Z"/>
-    <path d="M19 14h20M19 44h20M23 20v18M28 20v18M33 20v18M38 20v18"/>
-    <path d="M47 18h7M47 29h9M47 40h7M4 18h8M2 29h10M4 40h8"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="710" height="320" viewBox="0 0 710 320" fill="none">
+  <title>Pak-tel eSIM</title>
+  <defs>
+    <linearGradient id="pakMark" x1="74" y1="28" x2="257" y2="282" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6BE0C6"/>
+      <stop offset=".52" stop-color="#8FDC27"/>
+      <stop offset="1" stop-color="#16A985"/>
+    </linearGradient>
+    <linearGradient id="chip" x1="152" y1="89" x2="211" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F1F2EE"/>
+      <stop offset="1" stop-color="#858A84"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#pakMark)">
+    <path d="M83 91c0-47 38-84 85-84h63c59 0 103 43 103 99 0 56-44 99-103 99h-54v73H83V91Zm94 49h50c24 0 42-13 42-35 0-22-18-36-42-36h-50v71Z"/>
+    <path d="M74 224c14-25 34-40 62-43v74c-28 4-47 18-57 39-12-19-14-45-5-70Z"/>
   </g>
-  <text x="62" y="40" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="-2.7">Pak<tspan fill="#C8FF43">–</tspan>Tel</text>
+  <path d="M158 92h57c15 0 27 12 27 27v34h-84V92Z" fill="#09131F"/>
+  <g transform="rotate(-5 180 120)">
+    <rect x="156" y="93" width="61" height="57" rx="12" fill="url(#chip)" stroke="#515B5D" stroke-width="2"/>
+    <path d="M169 94v16h35V94M156 111h13v21h-13M204 111h13v21h-13M169 150v-13h35v13M169 121h35M180 111v21M193 111v21" stroke="#6D7472" stroke-width="2"/>
+  </g>
+  <g stroke="#7DD534" stroke-linecap="round" stroke-width="8">
+    <path d="M260 22c35 12 58 37 68 71"/>
+    <path d="M260 48c22 8 36 23 42 45"/>
+    <path d="M260 75c9 3 15 9 18 18"/>
+  </g>
+  <circle cx="255" cy="101" r="10" fill="#70D13F"/>
+  <g transform="rotate(3 112 242)">
+    <path d="M95 182h27c12 0 21 9 21 21v99H95c-9 0-16-7-16-16v-88c0-9 7-16 16-16Z" fill="#FFF"/>
+    <path d="M101 192v58M111 192v58M121 192v58" stroke="#D9E0DA" stroke-width="2"/>
+    <text x="92" y="275" fill="#425052" font-family="Arial, sans-serif" font-size="10" font-weight="700" transform="rotate(-3 92 275)">PAK</text>
+  </g>
+  <text x="298" y="171" fill="#FFF" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="700" letter-spacing="-4">Pak-tel</text>
+  <text x="300" y="245" fill="#56C532" font-family="Arial, Helvetica, sans-serif" font-size="68" font-weight="700" letter-spacing="-3">eSIM</text>
 </svg>

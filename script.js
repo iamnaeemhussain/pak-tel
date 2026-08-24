@@ -192,6 +192,19 @@
     });
   }
 
+  const specIcons = {
+    Coverage: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18v-3"/><path d="M8 18v-6"/><path d="M12 18V9"/><path d="M16 18V6"/><path d="M20 18V3"/><path d="M3 21h18"/></svg>`,
+    "Plan type": `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h4M7 13h7M16 13h2"/></svg>`,
+    "Validity period": `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7 3v4M17 3v4M3.5 10h17M7 14h.01M12 14h.01M17 14h.01M7 17h.01M12 17h.01"/></svg>`,
+    Hotspot: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5a13.5 13.5 0 0 1 18 0M6.5 13a8.5 8.5 0 0 1 11 0M10 16.5a4 4 0 0 1 4 0"/><path d="M12 20h.01"/></svg>`,
+    "Plan activation": `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m13 2-8 12h6l-1 8 8-12h-6l1-8Z"/></svg>`,
+    Reloadable: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8.1 8.1 0 0 0-14.7-3L4 10"/><path d="M4 5v5h5"/><path d="M4 13a8.1 8.1 0 0 0 14.7 3L20 14"/><path d="M20 19v-5h-5"/></svg>`
+  };
+
+  function planSpecIcon(label) {
+    return specIcons[label] || `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>`;
+  }
+
   function planCard(plan, visibleIndex) {
     const parts = dataParts(plan.dataLabel);
     const badge = plan.popular
@@ -220,7 +233,7 @@
         <div class="plan-copy">
           <p class="plan-name">${escapeHTML(plan.name)}</p>
           <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
-          <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
+          <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt><span class="spec-icon">${planSpecIcon(label)}</span><span>${escapeHTML(label)}</span></dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
         </div>
         <div class="plan-bottom">
           <div class="plan-price"><span class="plan-price-label">Total price</span><strong>${escapeHTML(price)}</strong></div>
@@ -377,7 +390,7 @@
     const fallbacks = [...document.querySelectorAll(".brand-fallback")];
     if (!logoImages.length) return;
 
-    const candidates = ["logo.png", "logo.jpg", "logo.jpeg", "logo.webp", "logo.svg"];
+    const candidates = ["ptlogo.png", "ptlogo.svg", "logo.png", "logo.jpg", "logo.jpeg", "logo.webp", "logo.svg"];
     const tryCandidate = (index) => {
       if (index >= candidates.length) return;
       const probe = new Image();
