@@ -257,7 +257,7 @@
         </div>
         <div class="plan-copy">
           <p class="plan-name">${escapeHTML(plan.name)}</p>
-          <div class="plan-metric">${discountStar}<strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
+          <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span>${discountStar}</div>
           <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt><span class="spec-icon">${planSpecIcon(label)}</span><span>${escapeHTML(label)}</span></dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
         </div>
         <div class="plan-bottom">
