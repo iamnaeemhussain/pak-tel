@@ -23,16 +23,16 @@
   };
 
   const deviceBrands = [
-    { name: "Apple", monogram: "A", models: ["iPhone XS", "iPhone XS Max", "iPhone XR", "iPhone 11", "iPhone 12", "iPhone 13", "iPhone 14", "iPhone 15", "iPhone 16", "iPhone 17", "iPad Pro", "iPad Air"] },
-    { name: "Samsung", monogram: "S", models: ["Galaxy S20", "Galaxy S21", "Galaxy S22", "Galaxy S23", "Galaxy S24", "Galaxy S25", "Galaxy Note20", "Galaxy Z Flip", "Galaxy Z Fold", "Galaxy A54", "Galaxy A55"] },
-    { name: "Google", monogram: "G", models: ["Pixel 3a", "Pixel 4", "Pixel 5", "Pixel 6", "Pixel 7", "Pixel 8", "Pixel 9", "Pixel 10", "Pixel Fold"] },
-    { name: "Xiaomi", monogram: "Mi", models: ["Xiaomi 12T Pro", "Xiaomi 13", "Xiaomi 13 Pro", "Xiaomi 14", "Xiaomi 15", "Redmi Note 13 Pro+", "Redmi Note 14 Pro+"] },
-    { name: "Huawei", monogram: "H", models: ["P40", "P40 Pro", "Mate 40 Pro", "P50 Pro", "Mate 50 Pro", "Mate Xs 2"] },
-    { name: "Motorola", monogram: "M", models: ["Razr 2019", "Razr 40", "Razr 50", "Edge 40", "Edge 50", "Moto G75"] },
-    { name: "OnePlus", monogram: "1+", models: ["OnePlus 11", "OnePlus 12", "OnePlus 13", "OnePlus Open"] },
-    { name: "Oppo", monogram: "O", models: ["Find X3 Pro", "Find X5 Pro", "Find X8", "Find N2 Flip", "Reno 12 Pro"] },
-    { name: "Sony", monogram: "X", models: ["Xperia 1 IV", "Xperia 1 V", "Xperia 1 VI", "Xperia 5 IV", "Xperia 10 IV"] },
-    { name: "Honor", monogram: "Hn", models: ["Magic 4 Pro", "Magic 5 Pro", "Magic 6 Pro", "Magic V2", "200 Pro"] }
+    { name: "Apple", monogram: "A", logo: "https://cdn.simpleicons.org/apple/071322", models: ["iPhone XS", "iPhone XS Max", "iPhone XR", "iPhone 11", "iPhone 12", "iPhone 13", "iPhone 14", "iPhone 15", "iPhone 16", "iPhone 17", "iPad Pro", "iPad Air"] },
+    { name: "Samsung", monogram: "S", logo: "https://cdn.simpleicons.org/samsung/071322", models: ["Galaxy S20", "Galaxy S21", "Galaxy S22", "Galaxy S23", "Galaxy S24", "Galaxy S25", "Galaxy Note20", "Galaxy Z Flip", "Galaxy Z Fold", "Galaxy A54", "Galaxy A55"] },
+    { name: "Google", monogram: "G", logo: "https://cdn.simpleicons.org/google/071322", models: ["Pixel 3a", "Pixel 4", "Pixel 5", "Pixel 6", "Pixel 7", "Pixel 8", "Pixel 9", "Pixel 10", "Pixel Fold"] },
+    { name: "Xiaomi", monogram: "Mi", logo: "https://cdn.simpleicons.org/xiaomi/071322", models: ["Xiaomi 12T Pro", "Xiaomi 13", "Xiaomi 13 Pro", "Xiaomi 14", "Xiaomi 15", "Redmi Note 13 Pro+", "Redmi Note 14 Pro+"] },
+    { name: "Huawei", monogram: "H", logo: "https://cdn.simpleicons.org/huawei/071322", models: ["P40", "P40 Pro", "Mate 40 Pro", "P50 Pro", "Mate 50 Pro", "Mate Xs 2"] },
+    { name: "Motorola", monogram: "M", logo: "https://cdn.simpleicons.org/motorola/071322", models: ["Razr 2019", "Razr 40", "Razr 50", "Edge 40", "Edge 50", "Moto G75"] },
+    { name: "OnePlus", monogram: "1+", logo: "https://cdn.simpleicons.org/oneplus/071322", models: ["OnePlus 11", "OnePlus 12", "OnePlus 13", "OnePlus Open"] },
+    { name: "Oppo", monogram: "O", logo: "https://cdn.simpleicons.org/oppo/071322", models: ["Find X3 Pro", "Find X5 Pro", "Find X8", "Find N2 Flip", "Reno 12 Pro"] },
+    { name: "Sony", monogram: "X", logo: "https://cdn.simpleicons.org/sony/071322", models: ["Xperia 1 IV", "Xperia 1 V", "Xperia 1 VI", "Xperia 5 IV", "Xperia 10 IV"] },
+    { name: "Honor", monogram: "Hn", logo: "https://cdn.simpleicons.org/honor/071322", models: ["Magic 4 Pro", "Magic 5 Pro", "Magic 6 Pro", "Magic V2", "200 Pro"] }
   ];
 
   const elements = {};
@@ -336,9 +336,16 @@
     if (!elements.brandGrid) return;
     elements.brandGrid.innerHTML = deviceBrands.map((brand) => `
       <button class="brand-button" type="button" data-brand="${escapeHTML(brand.name)}" aria-label="Browse ${escapeHTML(brand.name)} models">
-        <span class="brand-monogram" aria-hidden="true">${escapeHTML(brand.monogram)}</span>
+        <span class="brand-logo-wrap">
+          <img class="brand-logo" src="${escapeHTML(brand.logo)}" alt="${escapeHTML(brand.name)} logo" loading="lazy" />
+          <span class="brand-monogram" aria-hidden="true">${escapeHTML(brand.monogram)}</span>
+        </span>
         <span>${escapeHTML(brand.name)}</span>
       </button>`).join("");
+
+    elements.brandGrid.querySelectorAll(".brand-logo").forEach((image) => {
+      if (image.complete && image.naturalWidth > 0) image.parentElement.classList.add("has-logo");
+    });
   }
 
   function resultMarkup(title, detail, unknown = false) {
@@ -531,6 +538,14 @@
       const button = event.target.closest("[data-brand]");
       if (button) showBrand(button.dataset.brand);
     });
+
+    elements.brandGrid.addEventListener("load", (event) => {
+      if (event.target.matches(".brand-logo")) event.target.parentElement.classList.add("has-logo");
+    }, true);
+
+    elements.brandGrid.addEventListener("error", (event) => {
+      if (event.target.matches(".brand-logo")) event.target.remove();
+    }, true);
 
     elements.floatingWhatsApp.addEventListener("click", () => {
       window.open(whatsappUrl("Hi Pak-Tel! I’d like help choosing an eSIM plan."), "_blank", "noopener,noreferrer");
