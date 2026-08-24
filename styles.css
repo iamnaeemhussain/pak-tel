@@ -3162,8 +3162,9 @@ a {
   .brand-type { font-size: 20px; }
   .brand-glyph { width: 27px; height: 34px; }
   .banner-section { padding-top: 18px; }
-  .campaign-banner, .campaign-banner-image, .banner-fallback { min-height: 300px; }
-  .banner-fallback { display: block; padding: 27px 24px; }
+  .campaign-banner { min-height: 0; }
+  .campaign-banner-image { min-height: 0; }
+  .banner-fallback { min-height: 300px; display: block; padding: 27px 24px; }
   .banner-fallback-copy h2 { font-size: 38px; }
   .banner-fallback-art { height: 130px; margin-top: 4px; }
   .banner-fallback-label { right: 24px; bottom: 16px; font-size: 7px; }
