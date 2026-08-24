@@ -407,6 +407,28 @@
     tryCandidate(0);
   }
 
+  function setupBanner() {
+    const bannerImage = document.querySelector("[data-banner-image]");
+    const bannerFallback = document.querySelector("[data-banner-fallback]");
+    if (!bannerImage || !bannerFallback) return;
+
+    const showImage = () => {
+      bannerImage.hidden = false;
+      bannerFallback.hidden = true;
+    };
+    const showFallback = () => {
+      bannerImage.hidden = true;
+      bannerFallback.hidden = false;
+    };
+
+    bannerImage.addEventListener("load", showImage, { once: true });
+    bannerImage.addEventListener("error", showFallback, { once: true });
+    if (bannerImage.complete) {
+      if (bannerImage.naturalWidth > 0) showImage();
+      else showFallback();
+    }
+  }
+
   function setupNavigation() {
     const menuToggle = document.querySelector(".menu-toggle");
     const mainNav = document.querySelector(".main-nav");
@@ -536,6 +558,7 @@
     renderPlans();
     renderBrands();
     setupLogo();
+    setupBanner();
     setupNavigation();
     setupHeader();
     setupReveal();

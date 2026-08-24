@@ -1033,6 +1033,167 @@ a {
   text-transform: uppercase;
 }
 
+.banner-section {
+  position: relative;
+  z-index: 2;
+  padding: 34px 0 0;
+  background: var(--paper);
+}
+
+.campaign-banner {
+  position: relative;
+  min-height: 256px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--ink);
+  box-shadow: 0 22px 50px rgba(7, 19, 34, 0.13);
+}
+
+.campaign-banner-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 256px;
+  object-fit: cover;
+}
+
+.banner-fallback {
+  position: relative;
+  display: grid;
+  min-height: 256px;
+  grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.65fr);
+  align-items: center;
+  overflow: hidden;
+  padding: 35px 52px;
+  color: var(--white);
+  background: #0b1c2b;
+  isolation: isolate;
+}
+
+.banner-fallback::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: linear-gradient(rgba(215, 241, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(215, 241, 255, 0.06) 1px, transparent 1px);
+  background-size: 47px 47px;
+  content: "";
+  mask-image: linear-gradient(110deg, black, transparent 74%);
+}
+
+.banner-fallback::after {
+  position: absolute;
+  z-index: -1;
+  top: -160px;
+  right: 11%;
+  width: 440px;
+  height: 440px;
+  border: 1px solid rgba(200, 255, 67, 0.19);
+  border-radius: 50%;
+  box-shadow: 0 0 0 36px rgba(200, 255, 67, 0.03), 0 0 0 94px rgba(200, 255, 67, 0.025);
+  content: "";
+}
+
+.banner-fallback-copy h2 {
+  margin: 14px 0 0;
+  font-family: var(--display);
+  font-size: clamp(31px, 3.8vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 0.96;
+}
+
+.banner-fallback-copy h2 em {
+  color: var(--lime);
+  font-style: normal;
+}
+
+.banner-fallback-copy p {
+  margin: 16px 0 0;
+  color: rgba(231, 242, 250, 0.6);
+  font-size: 12px;
+}
+
+.banner-fallback-art {
+  position: relative;
+  height: 180px;
+}
+
+.banner-fallback-chip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 77px;
+  height: 60px;
+  place-items: center;
+  border: 1px solid rgba(7, 19, 34, 0.58);
+  border-radius: 13px;
+  color: var(--ink);
+  background: linear-gradient(135deg, var(--lime), var(--teal));
+  box-shadow: 0 0 0 8px rgba(200, 255, 67, 0.08), 0 0 34px rgba(200, 255, 67, 0.2);
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  transform: translate(-50%, -50%) rotate(10deg);
+}
+
+.banner-fallback-chip::before,
+.banner-fallback-chip::after {
+  position: absolute;
+  width: 36px;
+  height: 18px;
+  border: 1px solid rgba(7, 19, 34, 0.48);
+  content: "";
+}
+
+.banner-fallback-chip::before {
+  top: 20px;
+  left: 0;
+  border-left: 0;
+  border-radius: 0 7px 7px 0;
+}
+
+.banner-fallback-chip::after {
+  right: 0;
+  bottom: 20px;
+  border-right: 0;
+  border-radius: 7px 0 0 7px;
+}
+
+.banner-signal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid rgba(200, 255, 67, 0.38);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.banner-signal--one { width: 135px; height: 135px; }
+.banner-signal--two { width: 225px; height: 225px; border-color: rgba(109, 227, 193, 0.23); }
+.banner-signal--three { width: 324px; height: 324px; border-color: rgba(200, 255, 67, 0.12); }
+
+.banner-route-dot {
+  position: absolute;
+  top: 34px;
+  right: 8%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 6px rgba(255, 173, 113, 0.12), 0 0 20px var(--orange);
+}
+
+.banner-fallback-label {
+  position: absolute;
+  right: 52px;
+  bottom: 22px;
+  color: var(--lime);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
 .section-light,
 .section-paper {
   background: var(--paper);
@@ -2953,6 +3114,8 @@ a {
   .live-pill { display: none; }
   .header-cta { display: none; }
 
+  .banner-section { padding-top: 24px; }
+  .banner-fallback { padding: 30px 34px; }
   .hero { min-height: auto; padding-top: 132px; }
   .hero-inner { display: block; min-height: auto; }
   .hero-copy { max-width: 650px; }
@@ -2998,6 +3161,12 @@ a {
   .brand-image { max-width: 155px; max-height: 56px; }
   .brand-type { font-size: 20px; }
   .brand-glyph { width: 27px; height: 34px; }
+  .banner-section { padding-top: 18px; }
+  .campaign-banner, .campaign-banner-image, .banner-fallback { min-height: 300px; }
+  .banner-fallback { display: block; padding: 27px 24px; }
+  .banner-fallback-copy h2 { font-size: 38px; }
+  .banner-fallback-art { height: 130px; margin-top: 4px; }
+  .banner-fallback-label { right: 24px; bottom: 16px; font-size: 7px; }
   .hero { padding-top: 121px; }
   .hero-copy h1 { font-size: clamp(50px, 15vw, 71px); }
   .hero-lede { font-size: 15px; }
