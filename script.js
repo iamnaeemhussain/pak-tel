@@ -6,12 +6,12 @@
   const fallbackPlans = [
     { name: "Basic Trial Plan", price: 199, dataLabel: "100 MB", days: "7 Days", reloadable: true, popular: false },
     { name: "Pilot Run Plan", price: 499, dataLabel: "500 MB", days: "7 Days", reloadable: true, popular: false },
-    { name: "1GB 7 Days", price: 899, dataLabel: "1 GB", days: "7 Days", reloadable: true, discount: 60, popular: false },
-    { name: "3GB 15 Days", price: 1199, dataLabel: "3 GB", days: "15 Days", reloadable: true, discount: 60, popular: false },
-    { name: "3GB 30 Days", price: 1299, dataLabel: "3 GB", days: "30 Days", reloadable: true, discount: 52, popular: false },
-    { name: "5GB 30 Days", price: 1799, dataLabel: "5 GB", days: "30 Days", reloadable: true, discount: 51, popular: true },
-    { name: "10GB 30 Days", price: 2499, dataLabel: "10 GB", days: "30 Days", reloadable: true, discount: 56, popular: true },
-    { name: "20GB 30 Days", price: 4099, dataLabel: "20 GB", days: "30 Days", reloadable: true, discount: 63, popular: true }
+    { name: "1GB 7 Days", price: 899, actualPrice: 1500, dataLabel: "1 GB", days: "7 Days", reloadable: true, discount: 60, popular: false },
+    { name: "3GB 15 Days", price: 1199, actualPrice: 2000, dataLabel: "3 GB", days: "15 Days", reloadable: true, discount: 60, popular: false },
+    { name: "3GB 30 Days", price: 1299, actualPrice: 2500, dataLabel: "3 GB", days: "30 Days", reloadable: true, discount: 52, popular: false },
+    { name: "5GB 30 Days", price: 1799, actualPrice: 3500, dataLabel: "5 GB", days: "30 Days", reloadable: true, discount: 51, popular: true },
+    { name: "10GB 30 Days", price: 2499, actualPrice: 4500, dataLabel: "10 GB", days: "30 Days", reloadable: true, discount: 56, popular: true },
+    { name: "20GB 30 Days", price: 4099, actualPrice: 6500, dataLabel: "20 GB", days: "30 Days", reloadable: true, discount: 63, popular: true }
   ].map((plan, index) => ({ ...plan, id: slugify(plan.name), dataValueMB: parseDataValue(plan.dataLabel), index }));
 
   const state = {
@@ -67,7 +67,7 @@
   }
 
   function discountLabel(value) {
-    const amount = typeof value === "number" ? value : parseDiscount(value);
+    const amount = parseDiscount(value);
     return amount ? `${amount}% OFF` : "";
   }
 
@@ -98,6 +98,7 @@
     if (!name || !dataLabel) return null;
 
     const price = parsePrice(get("Price (PKR)", "Price", "Price PKR"));
+    const actualPrice = parsePrice(get("Actual Price", "Original Price", "Retail Price"));
     const discount = parseDiscount(get("Discount %", "Discount", "Discount Rate"));
     const days = get("Days", "Validity") || "Flexible validity";
     const reloadableText = get("Reloadable");
@@ -107,6 +108,7 @@
       id: `${slugify(name)}-${index}`,
       name,
       price,
+      actualPrice,
       discount,
       dataLabel,
       dataValueMB: parseDataValue(dataLabel),
@@ -229,8 +231,11 @@
       ? `<span class="plan-badge">Most popular</span>`
       : `<span class="plan-badge plan-badge--quiet">Flexible data</span>`;
     const discount = discountLabel(plan.discount);
-    const discountBadge = discount ? `<span class="discount-badge"><span aria-hidden="true">↘</span>${escapeHTML(discount)}</span>` : "";
+    const discountAmount = discount.replace(/\s+OFF$/i, "");
+    const discountStar = discount ? `<span class="discount-star" role="img" title="${escapeHTML(discount)}" aria-label="${escapeHTML(discount)}"><span>${escapeHTML(discountAmount)}</span><small>OFF</small></span>` : "";
     const price = formatPrice(plan.price);
+    const actualPrice = plan.actualPrice !== null && plan.actualPrice !== undefined ? formatPrice(plan.actualPrice) : "";
+    const actualPriceMarkup = actualPrice ? `<span class="plan-original-price" title="Actual price"><small>Actual</small>${escapeHTML(actualPrice)}</span>` : "";
     const coverage = plan.coverage || "5G/4G/LTE";
     const planType = plan.planType || "Data only";
     const hotspot = plan.hotspot || "Yes";
@@ -247,16 +252,16 @@
     return `
       <article class="plan-card${plan.popular ? " is-popular" : ""}">
         <div class="plan-card-top">
-          <div class="plan-badges">${badge}${discountBadge}</div>
+          <div class="plan-badges">${badge}</div>
           <span class="plan-top-meta"><span class="sim-chip" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span></span>
         </div>
         <div class="plan-copy">
           <p class="plan-name">${escapeHTML(plan.name)}</p>
-          <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
+          <div class="plan-metric">${discountStar}<strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
           <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt><span class="spec-icon">${planSpecIcon(label)}</span><span>${escapeHTML(label)}</span></dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
         </div>
         <div class="plan-bottom">
-          <div class="plan-price"><span class="plan-price-label">Total price</span><strong>${escapeHTML(price)}</strong></div>
+          <div class="plan-price"><span class="plan-price-label">Price (PKR)</span><div class="plan-price-values">${actualPriceMarkup}<strong>${escapeHTML(price)}</strong></div></div>
           <button class="plan-button" type="button" data-plan-id="${escapeHTML(plan.id)}">Get this plan <span aria-hidden="true">↗</span></button>
         </div>
       </article>`;

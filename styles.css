@@ -1385,29 +1385,6 @@ a {
   gap: 6px;
 }
 
-.discount-badge {
-  display: inline-flex;
-  min-height: 20px;
-  align-items: center;
-  gap: 4px;
-  border-radius: 999px;
-  padding: 4px 8px;
-  color: var(--ink);
-  background: var(--orange);
-  font-family: var(--mono);
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.discount-badge > span {
-  font-family: var(--display);
-  font-size: 12px;
-  line-height: 0.8;
-}
-
 .plan-badge {
   display: inline-flex;
   min-height: 20px;
@@ -1577,9 +1554,59 @@ a {
 
 .plan-metric {
   display: flex;
-  align-items: flex-end;
-  gap: 7px;
+  align-items: center;
+  gap: 9px;
   margin-top: 10px;
+}
+
+.discount-star {
+  position: relative;
+  display: grid;
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  place-items: center;
+  color: var(--ink);
+  filter: drop-shadow(0 7px 6px rgba(170, 117, 18, 0.16));
+  transform: rotate(-8deg);
+}
+
+.discount-star::before {
+  position: absolute;
+  inset: 0;
+  color: #f3bd43;
+  content: "★";
+  font-family: Arial, sans-serif;
+  font-size: 76px;
+  line-height: 0.95;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(146, 88, 5, 0.2);
+}
+
+.discount-star > span,
+.discount-star > small {
+  position: relative;
+  z-index: 1;
+  display: block;
+  text-align: center;
+}
+
+.discount-star > span {
+  margin-top: 4px;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.discount-star > small {
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1;
 }
 
 .plan-metric strong {
@@ -1710,13 +1737,56 @@ a {
   color: rgba(236, 246, 255, 0.44);
 }
 
+.plan-price-values {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.plan-original-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: rgba(7, 19, 34, 0.46);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: rgba(180, 70, 51, 0.8);
+  white-space: nowrap;
+}
+
+.plan-original-price small {
+  color: rgba(7, 19, 34, 0.45);
+  font-family: var(--mono);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.plan-card.is-popular .plan-original-price {
+  color: rgba(236, 246, 255, 0.46);
+  text-decoration-color: rgba(255, 173, 113, 0.95);
+}
+
 .plan-price strong {
-  display: block;
+  display: inline-block;
+  color: var(--ink);
   font-family: var(--display);
   font-size: 23px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.07em;
   line-height: 1;
+  white-space: nowrap;
+}
+
+.plan-card.is-popular .plan-price strong {
+  color: var(--white);
 }
 
 .plan-button {
