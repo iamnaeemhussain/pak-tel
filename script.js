@@ -6,12 +6,12 @@
   const fallbackPlans = [
     { name: "Basic Trial Plan", price: 199, dataLabel: "100 MB", days: "7 Days", reloadable: true, popular: false },
     { name: "Pilot Run Plan", price: 499, dataLabel: "500 MB", days: "7 Days", reloadable: true, popular: false },
-    { name: "1GB 7 Days", price: 899, dataLabel: "1 GB", days: "7 Days", reloadable: true, popular: false },
-    { name: "3GB 15 Days", price: 1199, dataLabel: "3 GB", days: "15 Days", reloadable: true, popular: false },
-    { name: "3GB 30 Days", price: 1299, dataLabel: "3 GB", days: "30 Days", reloadable: true, popular: false },
-    { name: "5GB 30 Days", price: 1799, dataLabel: "5 GB", days: "30 Days", reloadable: true, popular: true },
-    { name: "10GB 30 Days", price: 2499, dataLabel: "10 GB", days: "30 Days", reloadable: true, popular: true },
-    { name: "20GB 30 Days", price: 4099, dataLabel: "20 GB", days: "30 Days", reloadable: true, popular: true }
+    { name: "1GB 7 Days", price: 899, dataLabel: "1 GB", days: "7 Days", reloadable: true, discount: 60, popular: false },
+    { name: "3GB 15 Days", price: 1199, dataLabel: "3 GB", days: "15 Days", reloadable: true, discount: 60, popular: false },
+    { name: "3GB 30 Days", price: 1299, dataLabel: "3 GB", days: "30 Days", reloadable: true, discount: 52, popular: false },
+    { name: "5GB 30 Days", price: 1799, dataLabel: "5 GB", days: "30 Days", reloadable: true, discount: 51, popular: true },
+    { name: "10GB 30 Days", price: 2499, dataLabel: "10 GB", days: "30 Days", reloadable: true, discount: 56, popular: true },
+    { name: "20GB 30 Days", price: 4099, dataLabel: "20 GB", days: "30 Days", reloadable: true, discount: 63, popular: true }
   ].map((plan, index) => ({ ...plan, id: slugify(plan.name), dataValueMB: parseDataValue(plan.dataLabel), index }));
 
   const state = {
@@ -55,6 +55,22 @@
     return Number.isFinite(parsed) ? parsed : null;
   }
 
+  function parseDiscount(value) {
+    const rawValue = String(value || "").replace(/,/g, "").trim();
+    const match = rawValue.match(/([\d.]+)\s*%?/);
+    if (!match) return null;
+    let amount = Number(match[1]);
+    if (!Number.isFinite(amount) || amount <= 0) return null;
+    if (!rawValue.includes("%") && amount < 1) amount *= 100;
+    if (amount > 100) return null;
+    return Number.isInteger(amount) ? amount : Number(amount.toFixed(1));
+  }
+
+  function discountLabel(value) {
+    const amount = typeof value === "number" ? value : parseDiscount(value);
+    return amount ? `${amount}% OFF` : "";
+  }
+
   function parseDataValue(value) {
     const match = String(value || "").replace(/,/g, "").match(/([\d.]+)\s*(mb|gb)/i);
     if (!match) return 0;
@@ -82,6 +98,7 @@
     if (!name || !dataLabel) return null;
 
     const price = parsePrice(get("Price (PKR)", "Price", "Price PKR"));
+    const discount = parseDiscount(get("Discount %", "Discount", "Discount Rate"));
     const days = get("Days", "Validity") || "Flexible validity";
     const reloadableText = get("Reloadable");
     const popularText = get("Most Popular", "Popular");
@@ -90,6 +107,7 @@
       id: `${slugify(name)}-${index}`,
       name,
       price,
+      discount,
       dataLabel,
       dataValueMB: parseDataValue(dataLabel),
       days,
@@ -210,6 +228,8 @@
     const badge = plan.popular
       ? `<span class="plan-badge">Most popular</span>`
       : `<span class="plan-badge plan-badge--quiet">Flexible data</span>`;
+    const discount = discountLabel(plan.discount);
+    const discountBadge = discount ? `<span class="discount-badge"><span aria-hidden="true">↘</span>${escapeHTML(discount)}</span>` : "";
     const price = formatPrice(plan.price);
     const coverage = plan.coverage || "5G/4G/LTE";
     const planType = plan.planType || "Data only";
@@ -227,7 +247,7 @@
     return `
       <article class="plan-card${plan.popular ? " is-popular" : ""}">
         <div class="plan-card-top">
-          ${badge}
+          <div class="plan-badges">${badge}${discountBadge}</div>
           <span class="plan-top-meta"><span class="sim-chip" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span></span>
         </div>
         <div class="plan-copy">

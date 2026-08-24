@@ -1378,6 +1378,36 @@ a {
   justify-content: space-between;
 }
 
+.plan-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.discount-badge {
+  display: inline-flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: var(--ink);
+  background: var(--orange);
+  font-family: var(--mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.discount-badge > span {
+  font-family: var(--display);
+  font-size: 12px;
+  line-height: 0.8;
+}
+
 .plan-badge {
   display: inline-flex;
   min-height: 20px;
