@@ -1786,31 +1786,42 @@ a {
 .plan-original-price {
   display: inline-flex;
   align-items: baseline;
-  gap: 4px;
-  color: rgba(7, 19, 34, 0.46);
+  gap: 6px;
+  color: rgba(7, 19, 34, 0.68);
   font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  text-decoration-line: line-through;
-  text-decoration-thickness: 1.5px;
-  text-decoration-color: rgba(180, 70, 51, 0.8);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   white-space: nowrap;
 }
 
 .plan-original-price small {
-  color: rgba(7, 19, 34, 0.45);
+  color: rgba(7, 19, 34, 0.58);
   font-family: var(--mono);
-  font-size: 7px;
+  font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.025em;
   text-transform: uppercase;
-  text-decoration: none;
 }
 
-.plan-card.is-popular .plan-original-price {
-  color: rgba(236, 246, 255, 0.46);
-  text-decoration-color: rgba(255, 173, 113, 0.95);
+.plan-original-price b {
+  color: rgba(7, 19, 34, 0.68);
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration-line: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: #db6e55;
+}
+
+.plan-card.is-popular .plan-original-price,
+.plan-card.is-popular .plan-original-price small,
+.plan-card.is-popular .plan-original-price b {
+  color: rgba(236, 246, 255, 0.72);
+}
+
+.plan-card.is-popular .plan-original-price b {
+  text-decoration-color: var(--orange);
 }
 
 .plan-price strong {
