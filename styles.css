@@ -1251,6 +1251,17 @@ a {
   color: rgba(236, 246, 255, 0.4);
 }
 
+.plan-top-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.plan-top-meta .sim-chip {
+  width: 29px;
+  height: 22px;
+}
+
 .plan-copy {
   margin-top: 27px;
 }

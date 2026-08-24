@@ -93,7 +93,6 @@
       dataLabel,
       dataValueMB: parseDataValue(dataLabel),
       days,
-      simType: get("SIM type", "Sim Type", "Product Type") || "Full-size SIM",
       coverage: get("Coverage", "Network") || "5G/4G/LTE",
       planType: get("Plan type", "Type") || "Data only",
       hotspot: get("Hotspot", "Tethering") || "Yes",
@@ -199,30 +198,27 @@
       ? `<span class="plan-badge">Most popular</span>`
       : `<span class="plan-badge plan-badge--quiet">Flexible data</span>`;
     const price = formatPrice(plan.price);
-    const simType = plan.simType || "Full-size SIM";
     const coverage = plan.coverage || "5G/4G/LTE";
     const planType = plan.planType || "Data only";
     const hotspot = plan.hotspot || "Yes";
     const activation = plan.activation || "Instant";
-    const reloadableLabel = plan.reloadable ? "Reloadable" : "One-time plan";
     const specifications = [
       ["Coverage", coverage],
       ["Plan type", planType],
       ["Validity period", plan.days],
       ["Hotspot", hotspot],
-      ["Plan activation", activation]
+      ["Plan activation", activation],
+      ["Reloadable", plan.reloadable ? "Yes" : "No"]
     ];
 
     return `
       <article class="plan-card${plan.popular ? " is-popular" : ""}">
-        <div class="plan-card-top">${badge}<span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span></div>
+        <div class="plan-card-top">
+          ${badge}
+          <span class="plan-top-meta"><span class="sim-chip" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="plan-index">${String(visibleIndex + 1).padStart(2, "0")}</span></span>
+        </div>
         <div class="plan-copy">
           <p class="plan-name">${escapeHTML(plan.name)}</p>
-          <div class="plan-identity">
-            <span class="sim-chip" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-            <span class="plan-identity-copy"><strong>${escapeHTML(simType)}</strong><small>${escapeHTML(reloadableLabel)}</small></span>
-            <span class="plan-ready"><i></i> Ready</span>
-          </div>
           <div class="plan-metric"><strong>${escapeHTML(parts.amount)}</strong><span>${escapeHTML(parts.unit)}<br />data</span></div>
           <dl class="plan-specs">${specifications.map(([label, value]) => `<div class="plan-spec"><dt>${escapeHTML(label)}</dt><dd>${escapeHTML(value)}</dd></div>`).join("")}</dl>
         </div>
