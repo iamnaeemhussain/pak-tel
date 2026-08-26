@@ -18,7 +18,7 @@
     plans: fallbackPlans,
     filter: "all",
     sort: "recommended",
-    messages: ["Stay connected with Pak-Tel — fresh plans and updates are on the move."],
+    messages: [],
     selectedPlan: null,
     lastFocusedElement: null
   };
@@ -176,19 +176,26 @@
     }, {}));
   }
 
-  function extractSheetMessages(rows) {
-    const messages = rows.map((row) => {
-      const messageKey = Object.keys(row).find((key) => normalizeKey(key) === "message");
-      return messageKey ? String(row[messageKey] || "").replace(/\s+/g, " ").trim() : "";
-    }).filter(Boolean);
-    return [...new Set(messages)].map((message) => message.slice(0, 280));
+  function extractSheetMessage(rows) {
+    const messageKey = Object.keys(rows[0] || {}).find((key) => normalizeKey(key) === "message");
+    if (!messageKey) return "";
+
+    const messageRow = rows.find((row) => String(row[messageKey] || "").trim());
+    return messageRow ? String(messageRow[messageKey]).replace(/\s+/g, " ").trim().slice(0, 280) : "";
   }
 
   function renderTicker() {
-    if (!elements.tickerTrack) return;
-    const messages = state.messages.length ? state.messages : ["Stay connected with Pak-Tel — fresh plans and updates are on the move."];
-    const items = messages.map((message) => `<span class="ticker-item">${escapeHTML(message)}</span>`).join("");
-    elements.tickerTrack.innerHTML = `<div class="ticker-set">${items}</div><div class="ticker-set" aria-hidden="true">${items}</div>`;
+    if (!elements.tickerTrack || !elements.tickerBar) return;
+    if (!state.messages.length) {
+      elements.tickerTrack.innerHTML = "";
+      elements.tickerBar.hidden = true;
+      return;
+    }
+
+    const message = state.messages[0];
+    const item = `<span class="ticker-item">${escapeHTML(message)}</span>`;
+    elements.tickerTrack.innerHTML = `<div class="ticker-set">${item}</div><div class="ticker-set" aria-hidden="true">${item}</div>`;
+    elements.tickerBar.hidden = false;
   }
 
   function formatPrice(price) {
@@ -320,14 +327,16 @@
       const plans = rows.map(normalizePlan).filter(Boolean);
       if (!plans.length) throw new Error("No plans found in sheet");
 
-      const messages = extractSheetMessages(rows);
-      if (messages.length) state.messages = messages;
+      const message = extractSheetMessage(rows);
+      state.messages = message ? [message] : [];
       renderTicker();
       state.plans = plans;
       renderPlans();
       setSheetStatus(`Live pricing synced · ${plans.length} plans`);
     } catch (error) {
       renderPlans();
+      state.messages = [];
+      renderTicker();
       setSheetStatus("Showing saved prices · sheet will retry on refresh", true);
       // The saved snapshot keeps the storefront useful when a sheet or connection is unavailable.
       console.info("Pak-Tel plan sheet unavailable; using saved plans.", error.message);
@@ -611,6 +620,7 @@
 
   function cacheElements() {
     elements.plansGrid = document.getElementById("plans-grid");
+    elements.tickerBar = document.getElementById("news-ticker");
     elements.tickerTrack = document.getElementById("news-ticker-track");
     elements.sheetStatus = document.getElementById("sheet-status");
     elements.statusText = document.querySelector("[data-status-text]");
