@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <title>Pak-Tel</title>
+  <defs>
+    <linearGradient id="signal" x1="10" y1="8" x2="52" y2="57" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6DE3C1"/>
+      <stop offset=".55" stop-color="#C8FF43"/>
+      <stop offset="1" stop-color="#28B88D"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#071322"/>
+  <path d="M14 52V15.5C14 11.9 16.9 9 20.5 9h14C43.1 9 49 14.9 49 23.5S43.1 38 34.5 38H26v14H14Zm12-24h8.5c2.8 0 4.8-1.7 4.8-4.5S37.3 19 34.5 19H26v9Z" fill="url(#signal)"/>
+  <rect x="26" y="19" width="13" height="12" rx="3" fill="#E7ECE5" stroke="#071322" stroke-width="1.3"/>
+  <path d="M29 19v4h7v-4M26 23h3v5h-3M36 23h3v5h-3M29 31v-4h7v4M29 24h7M32 23v5" stroke="#6D7772" stroke-width="1"/>
+  <path d="M45 6c6 2 10 6 12 12M45 12c3.7 1.2 6 3.7 7 7M45 18h.01" stroke="#C8FF43" stroke-width="2.8" stroke-linecap="round"/>
+</svg>
