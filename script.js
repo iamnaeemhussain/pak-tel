@@ -18,6 +18,7 @@
     plans: fallbackPlans,
     filter: "all",
     sort: "recommended",
+    messages: ["Stay connected with Pak-Tel — fresh plans and updates are on the move."],
     selectedPlan: null,
     lastFocusedElement: null
   };
@@ -175,6 +176,21 @@
     }, {}));
   }
 
+  function extractSheetMessages(rows) {
+    const messages = rows.map((row) => {
+      const messageKey = Object.keys(row).find((key) => normalizeKey(key) === "message");
+      return messageKey ? String(row[messageKey] || "").replace(/\s+/g, " ").trim() : "";
+    }).filter(Boolean);
+    return [...new Set(messages)].map((message) => message.slice(0, 280));
+  }
+
+  function renderTicker() {
+    if (!elements.tickerTrack) return;
+    const messages = state.messages.length ? state.messages : ["Stay connected with Pak-Tel — fresh plans and updates are on the move."];
+    const items = messages.map((message) => `<span class="ticker-item">${escapeHTML(message)}</span>`).join("");
+    elements.tickerTrack.innerHTML = `<div class="ticker-set">${items}</div><div class="ticker-set" aria-hidden="true">${items}</div>`;
+  }
+
   function formatPrice(price) {
     if (price === null || price === undefined || Number.isNaN(price)) return "Contact us";
     return `PKR ${new Intl.NumberFormat("en-PK", { maximumFractionDigits: 0 }).format(price)}`;
@@ -300,9 +316,13 @@
       const response = await fetch(SHEET_CSV_URL, { signal: controller.signal, cache: "no-store" });
       if (!response.ok) throw new Error(`Sheet request failed: ${response.status}`);
       const csv = await response.text();
-      const plans = parseCSV(csv).map(normalizePlan).filter(Boolean);
+      const rows = parseCSV(csv);
+      const plans = rows.map(normalizePlan).filter(Boolean);
       if (!plans.length) throw new Error("No plans found in sheet");
 
+      const messages = extractSheetMessages(rows);
+      if (messages.length) state.messages = messages;
+      renderTicker();
       state.plans = plans;
       renderPlans();
       setSheetStatus(`Live pricing synced · ${plans.length} plans`);
@@ -591,6 +611,7 @@
 
   function cacheElements() {
     elements.plansGrid = document.getElementById("plans-grid");
+    elements.tickerTrack = document.getElementById("news-ticker-track");
     elements.sheetStatus = document.getElementById("sheet-status");
     elements.statusText = document.querySelector("[data-status-text]");
     elements.sortSelect = document.getElementById("sort-select");
@@ -608,6 +629,7 @@
   function init() {
     cacheElements();
     renderPlans();
+    renderTicker();
     renderBrands();
     setupLogo();
     setupBanner();
