@@ -492,6 +492,89 @@
     }
   }
 
+  function setupReferralSlideshow() {
+    const slider = document.querySelector("[data-referral-slider]");
+    if (!slider) return;
+
+    const slides = [...slider.querySelectorAll("[data-referral-slide]")];
+    const dots = [...slider.querySelectorAll("[data-referral-dot]")];
+    const previousButton = slider.querySelector("[data-referral-prev]");
+    const nextButton = slider.querySelector("[data-referral-next]");
+    const pauseButton = slider.querySelector("[data-referral-pause]");
+    if (slides.length < 2) return;
+
+    let currentIndex = slides.findIndex((slide) => slide.classList.contains("is-active"));
+    if (currentIndex < 0) currentIndex = 0;
+    let timer = null;
+    let isPaused = false;
+
+    const showSlide = (nextIndex) => {
+      currentIndex = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        const isActive = index === currentIndex;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", String(!isActive));
+      });
+      dots.forEach((dot, index) => {
+        const isActive = index === currentIndex;
+        dot.classList.toggle("is-active", isActive);
+        dot.setAttribute("aria-selected", String(isActive));
+      });
+    };
+
+    const stopTimer = () => {
+      if (timer) window.clearInterval(timer);
+      timer = null;
+    };
+
+    const startTimer = () => {
+      stopTimer();
+      if (!isPaused) timer = window.setInterval(() => showSlide(currentIndex + 1), 6500);
+    };
+
+    const togglePause = () => {
+      isPaused = !isPaused;
+      if (pauseButton) {
+        pauseButton.textContent = isPaused ? "Play" : "Pause";
+        pauseButton.setAttribute("aria-label", isPaused ? "Play referral message slideshow" : "Pause referral message slideshow");
+      }
+      if (isPaused) stopTimer();
+      else startTimer();
+    };
+
+    previousButton?.addEventListener("click", () => { showSlide(currentIndex - 1); startTimer(); });
+    nextButton?.addEventListener("click", () => { showSlide(currentIndex + 1); startTimer(); });
+    dots.forEach((dot) => dot.addEventListener("click", () => { showSlide(Number(dot.dataset.referralDot)); startTimer(); }));
+    pauseButton?.addEventListener("click", togglePause);
+    slider.addEventListener("mouseenter", stopTimer);
+    slider.addEventListener("mouseleave", startTimer);
+    slider.addEventListener("focusin", stopTimer);
+    slider.addEventListener("focusout", (event) => {
+      if (!slider.contains(event.relatedTarget)) startTimer();
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopTimer();
+      else startTimer();
+    });
+
+    showSlide(currentIndex);
+    startTimer();
+  }
+
+  function setupReferralForm() {
+    const form = document.getElementById("referral-form");
+    const status = document.getElementById("referral-form-status");
+    if (!form || !status) return;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      status.textContent = "Your referral form is ready. Submission storage is not connected yet, so no information was sent or saved.";
+      status.hidden = false;
+      status.classList.add("is-visible");
+    });
+  }
+
   function setupNavigation() {
     const menuToggle = document.querySelector(".menu-toggle");
     const mainNav = document.querySelector(".main-nav");
@@ -643,6 +726,8 @@
     renderBrands();
     setupLogo();
     setupBanner();
+    setupReferralSlideshow();
+    setupReferralForm();
     setupNavigation();
     setupHeader();
     setupReveal();
