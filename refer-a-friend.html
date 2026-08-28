@@ -59,12 +59,12 @@
               <div class="referral-form-card-top"><span class="eyebrow"><span class="eyebrow-dot eyebrow-dot--dark"></span> Tell us who to help</span><span class="form-step-count">01 — 03</span></div>
               <form id="referral-form" class="referral-form">
                 <div class="referral-form-grid">
-                  <label class="referral-field"><span>Friend’s name <b>*</b></span><input type="text" name="friendName" autocomplete="off" placeholder="e.g. Hamza" required /></label>
-                  <label class="referral-field"><span>Friend’s WhatsApp number <b>*</b></span><input type="tel" name="friendContact" autocomplete="off" placeholder="+92 300 0000000" required /></label>
-                  <label class="referral-field"><span>Friend’s phone model</span><input type="text" name="friendDevice" autocomplete="off" placeholder="e.g. iPhone 15" /></label>
+                  <label class="referral-field"><span>Friend’s name <b>*</b></span><input type="text" name="friend_name" autocomplete="off" placeholder="e.g. Hamza" required /></label>
+                  <label class="referral-field"><span>Friend’s WhatsApp number <b>*</b></span><input type="tel" name="friend_whatsapp" autocomplete="off" placeholder="+92 300 0000000" required /></label>
+                  <label class="referral-field"><span>Friend’s phone model</span><input type="text" name="friend_phone_model" autocomplete="off" placeholder="e.g. iPhone 15" /></label>
                 </div>
-                <label class="referral-field referral-field--full"><span>Anything else we should know?</span><textarea name="referralNote" rows="4" placeholder="Tell us anything useful about their phone or data needs…"></textarea></label>
-                <label class="referral-consent"><input type="checkbox" name="referralConsent" required /><span class="referral-checkbox" aria-hidden="true">✓</span><span>I confirm that I have permission to share my friend’s contact details with Pak-Tel for this referral. <b>*</b></span></label>
+                <label class="referral-field referral-field--full"><span>Anything else we should know?</span><textarea name="notes" rows="4" placeholder="Tell us anything useful about their phone or data needs…"></textarea></label>
+                <label class="referral-consent"><input type="checkbox" name="permission" required /><span class="referral-checkbox" aria-hidden="true">✓</span><span>I confirm that I have permission to share my friend’s contact details with Pak-Tel for this referral. <b>*</b></span></label>
                 <button class="button button--dark referral-submit" type="submit">Submit referral <span aria-hidden="true">↗</span></button>
                 <div class="referral-form-status" id="referral-form-status" role="status" hidden></div>
               </form>

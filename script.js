@@ -1,6 +1,7 @@
 (() => {
   const SHEET_ID = "1mCEh8PIE1Ke5UnEBzWqBFnkcCdvRAkXtTEoYGNGRDvE";
   const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`;
+  const CRM_REFERRAL_ENDPOINT = "https://crm.pak-tel.com/api/public/referral-requests";
   const WHATSAPP_NUMBER = "923205094993";
 
   const fallbackPlans = [
@@ -495,14 +496,50 @@
   function setupReferralForm() {
     const form = document.getElementById("referral-form");
     const status = document.getElementById("referral-form-status");
-    if (!form || !status) return;
+    const submitButton = form?.querySelector("[type=submit]");
+    if (!form || !status || !submitButton) return;
 
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
-      status.textContent = "Your referral details are ready for the Pak-Tel team.";
+
+      const fields = form.elements;
+      const payload = {
+        friend_name: fields.friend_name.value.trim(),
+        friend_whatsapp: fields.friend_whatsapp.value.trim(),
+        friend_phone_model: fields.friend_phone_model.value.trim(),
+        notes: fields.notes.value.trim(),
+        permission: fields.permission.checked
+      };
+      const defaultButtonContent = submitButton.innerHTML;
+
+      submitButton.disabled = true;
+      submitButton.setAttribute("aria-busy", "true");
+      submitButton.innerHTML = "Sending referral <span aria-hidden=\"true\">…</span>";
+      status.className = "referral-form-status is-visible is-loading";
+      status.textContent = "Sending your referral…";
       status.hidden = false;
-      status.classList.add("is-visible");
+
+      try {
+        const response = await fetch(CRM_REFERRAL_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error(`Referral request failed: ${response.status}`);
+
+        status.className = "referral-form-status is-visible is-success";
+        status.textContent = "Referral sent successfully. Thank you for helping a friend get connected!";
+        form.reset();
+      } catch (error) {
+        status.className = "referral-form-status is-visible is-error";
+        status.textContent = "We couldn’t send the referral right now. Please try again or contact help@pak-tel.com.";
+        console.error("Pak-Tel referral submission failed.", error);
+      } finally {
+        submitButton.disabled = false;
+        submitButton.removeAttribute("aria-busy");
+        submitButton.innerHTML = defaultButtonContent;
+      }
     });
   }
 

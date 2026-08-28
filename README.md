@@ -22,4 +22,4 @@ Then open `http://localhost:4173`.
 - Plan prices load from the public Google Sheet in `script.js`; a saved snapshot is used if the sheet is unavailable.
 - The WhatsApp order number is configured as `923205094993` in `script.js` and the WhatsApp links in `index.html`.
 - `contact.html` includes support and administration contact options: `help@pak-tel.com` and `admin@pak-tel.com`.
-- `refer-a-friend.html` contains a focused permission-based referral form for a friend’s details and phone information.
+- `refer-a-friend.html` posts the permission-based referral form to `https://crm.pak-tel.com/api/public/referral-requests` using the CRM field names `friend_name`, `friend_whatsapp`, `friend_phone_model`, `notes`, and `permission`.
