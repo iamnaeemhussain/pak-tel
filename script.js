@@ -1,7 +1,8 @@
 (() => {
   const SHEET_ID = "1mCEh8PIE1Ke5UnEBzWqBFnkcCdvRAkXtTEoYGNGRDvE";
   const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`;
-  const CRM_REFERRAL_ENDPOINT = "https://crm.pak-tel.com/api/public/referral-requests";
+  // Paste the deployed Google Apps Script Web App /exec URL here.
+  const GOOGLE_SHEET_WEB_APP_URL = "";
   const WHATSAPP_NUMBER = "923205094993";
 
   const fallbackPlans = [
@@ -503,6 +504,13 @@
       event.preventDefault();
       if (!form.reportValidity()) return;
 
+      if (!GOOGLE_SHEET_WEB_APP_URL) {
+        status.className = "referral-form-status is-visible is-error";
+        status.textContent = "The referral form is not connected to Google Sheets yet. Add the Google Apps Script Web App URL in script.js.";
+        status.hidden = false;
+        return;
+      }
+
       const fields = form.elements;
       const payload = {
         friend_name: fields.friend_name.value.trim(),
@@ -521,36 +529,21 @@
       status.hidden = false;
 
       try {
-        const response = await fetch(CRM_REFERRAL_ENDPOINT, {
+        // Apps Script Web Apps do not reliably expose CORS response headers. A
+        // simple text/plain POST avoids the JSON preflight while the body stays JSON.
+        await fetch(GOOGLE_SHEET_WEB_APP_URL, {
           method: "POST",
-          mode: "cors",
-          credentials: "omit",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
         });
-        const responseBody = await response.text();
-        if (!response.ok) {
-          throw new Error(`CRM returned ${response.status}${responseBody ? `: ${responseBody.slice(0, 180)}` : ""}`);
-        }
-        if (response.redirected && /\/login/i.test(response.url)) {
-          throw new Error("CRM public endpoint redirected to staff login");
-        }
 
         status.className = "referral-form-status is-visible is-success";
         status.textContent = "Referral sent successfully. Thank you for helping a friend get connected!";
         form.reset();
       } catch (error) {
         status.className = "referral-form-status is-visible is-error";
-        if (error instanceof TypeError) {
-          status.textContent = "We couldn’t connect to the CRM. The Worker must allow this website with CORS. Please try again or contact help@pak-tel.com.";
-        } else if (/staff login/i.test(error.message)) {
-          status.textContent = "The CRM endpoint is redirecting to staff login. Please ask the CRM admin to enable the public referral POST route.";
-        } else {
-          status.textContent = "The CRM could not accept this referral right now. Please try again or contact help@pak-tel.com.";
-        }
+        status.textContent = "We couldn’t send the referral right now. Please try again or contact help@pak-tel.com.";
         console.error("Pak-Tel referral submission failed.", error);
       } finally {
         submitButton.disabled = false;

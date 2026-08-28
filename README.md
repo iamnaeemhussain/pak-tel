@@ -22,4 +22,16 @@ Then open `http://localhost:4173`.
 - Plan prices load from the public Google Sheet in `script.js`; a saved snapshot is used if the sheet is unavailable.
 - The WhatsApp order number is configured as `923205094993` in `script.js` and the WhatsApp links in `index.html`.
 - `contact.html` includes support and administration contact options: `help@pak-tel.com` and `admin@pak-tel.com`.
-- `refer-a-friend.html` posts the permission-based referral form to `https://crm.pak-tel.com/api/public/referral-requests` using the CRM field names `friend_name`, `friend_whatsapp`, `friend_phone_model`, `notes`, and `permission`.
+- `refer-a-friend.html` sends the permission-based referral form to the configured Google Apps Script Web App using `friend_name`, `friend_whatsapp`, `friend_phone_model`, `notes`, and `permission`.
+
+## Referral Google Sheet setup
+
+`google-apps-script.gs` is the receiver for the referral sheet:
+
+1. Open the referral spreadsheet and choose **Extensions → Apps Script**.
+2. Paste the contents of `google-apps-script.gs` into the Apps Script editor and save.
+3. Choose **Deploy → New deployment → Web app**.
+4. Set **Execute as** to your account and **Who has access** to **Anyone**, then deploy and approve the permissions.
+5. Copy the generated `/exec` URL into `GOOGLE_SHEET_WEB_APP_URL` near the top of `script.js`.
+
+The website sends `friend_name`, `friend_whatsapp`, `friend_phone_model`, `notes`, and a required `permission` flag. The Apps Script appends the four form fields to the sheet in the header order.
