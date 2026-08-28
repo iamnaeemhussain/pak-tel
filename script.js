@@ -2,7 +2,7 @@
   const SHEET_ID = "1mCEh8PIE1Ke5UnEBzWqBFnkcCdvRAkXtTEoYGNGRDvE";
   const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Sheet1`;
   // Paste the deployed Google Apps Script Web App /exec URL here.
-  const GOOGLE_SHEET_WEB_APP_URL = "";
+  const GOOGLE_SHEET_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyNl4NU6RgVG9u3yMjbmRcLy8fb44iVG3HaMUmM1KoAhj7WMLQZu2Xk8orzrSM6kTbDXA/exec";
   const WHATSAPP_NUMBER = "923205094993";
 
   const fallbackPlans = [
