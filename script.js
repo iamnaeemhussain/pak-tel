@@ -523,17 +523,34 @@
       try {
         const response = await fetch(CRM_REFERRAL_ENDPOINT, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          mode: "cors",
+          credentials: "omit",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
           body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error(`Referral request failed: ${response.status}`);
+        const responseBody = await response.text();
+        if (!response.ok) {
+          throw new Error(`CRM returned ${response.status}${responseBody ? `: ${responseBody.slice(0, 180)}` : ""}`);
+        }
+        if (response.redirected && /\/login/i.test(response.url)) {
+          throw new Error("CRM public endpoint redirected to staff login");
+        }
 
         status.className = "referral-form-status is-visible is-success";
         status.textContent = "Referral sent successfully. Thank you for helping a friend get connected!";
         form.reset();
       } catch (error) {
         status.className = "referral-form-status is-visible is-error";
-        status.textContent = "We couldn’t send the referral right now. Please try again or contact help@pak-tel.com.";
+        if (error instanceof TypeError) {
+          status.textContent = "We couldn’t connect to the CRM. The Worker must allow this website with CORS. Please try again or contact help@pak-tel.com.";
+        } else if (/staff login/i.test(error.message)) {
+          status.textContent = "The CRM endpoint is redirecting to staff login. Please ask the CRM admin to enable the public referral POST route.";
+        } else {
+          status.textContent = "The CRM could not accept this referral right now. Please try again or contact help@pak-tel.com.";
+        }
         console.error("Pak-Tel referral submission failed.", error);
       } finally {
         submitButton.disabled = false;
