@@ -20,7 +20,7 @@ Then open `http://localhost:4173`.
 - The right-to-left updates ticker reads the first available `Message` value from Google Sheet column O.
 - `favicon.svg` provides a compact Pak-Tel browser tab icon across the storefront and legal pages.
 - Plan prices load from the public Google Sheet in `script.js`; a saved snapshot is used if the sheet is unavailable.
-- The WhatsApp order number is configured as `923205094993` in `script.js` and the WhatsApp links in `index.html`.
+- The WhatsApp order number is configured as `923259717066` in `script.js` and the WhatsApp links in `index.html`.
 - `contact.html` includes support and administration contact options: `help@pak-tel.com` and `admin@pak-tel.com`.
 - `refer-a-friend.html` sends the permission-based referral form to the configured Google Apps Script Web App using `friend_name`, `friend_whatsapp`, `friend_phone_model`, `notes`, and `permission`.
 
